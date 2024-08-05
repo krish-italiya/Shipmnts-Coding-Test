@@ -61,8 +61,8 @@ const Table = () => {
       for (let i: number = 0; i < columns.length; i++) {
         if (
           data[columns[i] as keyof DataType]
-            .toLocaleString()
-            .includes(value.toLocaleString())
+            .toLocaleString().toLocaleLowerCase()
+            .includes(value.toLocaleString().toLocaleLowerCase())
         ) {
           return true;
         }
@@ -202,7 +202,7 @@ const Table = () => {
                   />
                 </Grid>
               </Grid>
-              <Button>Apply Filters</Button>
+              <Button onClick={(e)=>setOpen(false)}>Apply Filters</Button>
             </>
           )}
           {modalType === "string" && (
