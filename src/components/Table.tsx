@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { DataType, mockData } from "../data";
 import { CiFilter } from "react-icons/ci";
-import { Box, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, Modal, TextField, Typography } from "@mui/material";
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 500,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -54,8 +54,38 @@ const Table = () => {
     "lastLogin",
     "accessLevel",
   ];
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    const value = e.target.value;
+    const newData = mockData.filter((data) => {
+      for (let i: number = 0; i < columns.length; i++) {
+        if (
+          data[columns[i] as keyof DataType]
+            .toLocaleString()
+            .includes(value.toLocaleString())
+        ) {
+          return true;
+        }
+      }
+      return false;
+    });
+    setDummyData(newData);
+  };
   return (
     <>
+      <div className="mb-5 flex">
+        <TextField
+          id="outlined-search"
+          label="Search Any Record"
+          className="w-full mb-5"
+          type="search"
+          onChange={handleSearch}
+        />
+        {/* {dummyData!==mockData && (
+          <Button onClick={handleReset}>reset</Button>
+        )} */}
+      </div>
+
       <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
         <thead className="">
           <tr key="header">
@@ -75,7 +105,7 @@ const Table = () => {
             ))}
           </tr>
         </thead>
-        {dummyData.map((data, index) => (
+        {dummyData.map((data) => (
           <tbody key={data.id} className="">
             <tr
               key={data.id}
@@ -84,7 +114,7 @@ const Table = () => {
               {columns.map((col, id) => (
                 <td
                   key={`${data.id}_${id}`}
-                  className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-950"
+                  className="px-6 py-4  text-sm font-medium text-gray-800 dark:text-neutral-950"
                 >
                   {String(data[col as keyof DataType])}
                 </td>
@@ -105,46 +135,74 @@ const Table = () => {
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 Apply {modalTitle} Filters
               </Typography>
-              <TextField
-                id="outlined-number"
-                label="Value equals to"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="outlined-number"
-                label="Values less than"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="outlined-number"
-                label="Values less than or equal to"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="outlined-number"
-                label="Values greater than"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="outlined-number"
-                label="Values greater than or equals to"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
+              <Grid
+                container
+                spacing={2}
+                justifyContent={"center"}
+                sx={{ marginTop: 2 }}
+              >
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="outlined-number"
+                    label="Value equals to"
+                    type="number"
+                    name="equals"
+                    className="equals"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="outlined-number"
+                    label="Values less than"
+                    type="number"
+                    name="lessThan"
+                    className="less-than"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="outlined-number"
+                    label="Values less than or equal to"
+                    type="number"
+                    name="lessThanEqual"
+                    className="less-than-equal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="outlined-number"
+                    label="Values greater than"
+                    type="number"
+                    name="greaterThan"
+                    className="greater-than"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="outlined-number"
+                    label="Values greater than or equals to"
+                    type="number"
+                    name="greaterThanEqual"
+                    className="greater-than-equal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              <Button>Apply Filters</Button>
             </>
           )}
           {modalType === "string" && (
@@ -152,6 +210,11 @@ const Table = () => {
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 Apply {modalTitle} Filters
               </Typography>
+              <TextField
+                id="outlined-search"
+                label="Search field"
+                type="search"
+              />
             </>
           )}
           {modalType === "boolean" && (
