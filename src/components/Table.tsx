@@ -202,7 +202,7 @@ const Table = () => {
                   />
                 </Grid>
               </Grid>
-              <Button onClick={(e)=>setOpen(false)}>Apply Filters</Button>
+              <Button onClick={()=>setOpen(false)}>Apply Filters</Button>
             </>
           )}
           {modalType === "string" && (
